@@ -19,7 +19,9 @@ def save_to_excel(data: list, path):
     if "article" in df.columns:
         df.set_index("article", inplace=True)
 
-    df_sorted = df.sort_values(by="reciting", ascending=False, key=lambda x: pd.to_numeric(x.str.replace(',', '.'), errors='coerce'))
+    df["reciting"] = pd.to_numeric(df["reciting"].astype(str).str.replace(',', '.'), errors='coerce')
+    df_sorted = df.sort_values(by="reciting", ascending=False)
+
 
     with pd.ExcelWriter(path, engine="openpyxl") as writer:
         df.to_excel(writer, sheet_name="raw")
